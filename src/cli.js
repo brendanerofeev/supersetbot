@@ -150,6 +150,7 @@ export default function getCLI(context) {
       .action(async function (release) {
         const opts = context.processOptions(this, ['repo']);
         const git = new Git(context);
+        // eslint-disable-next-line no-await-in-loop
         await git.loadReleases();
         const prs = await git.getPRsToSync(release, opts.verbose, opts.excludeCherries);
 
@@ -199,7 +200,7 @@ export default function getCLI(context) {
         const github = new Github({ context });
         const buildContext = opts.context;
         const buildContextRef = opts.contextRef;
-        const extraFlags = opts.extraFlags;
+        const { extraFlags } = opts;
         const latestRelease = await github.getLatestReleaseTag();
         console.log(`Latest release: ${latestRelease}`);
         const command = await docker.getDockerCommand({
