@@ -86,6 +86,9 @@ export async function getDockerCommand({
   } else if (preset === 'py310') {
     buildTarget = 'lean';
     pyVer = '3.10-slim-bookworm';
+  } else if (preset === 'py311') {
+    buildTarget = 'lean';
+    pyVer = '3.11-slim-bookworm';
   } else if (preset === 'websocket') {
     dockerContext = 'superset-websocket';
   } else if (preset === 'ci') {
