@@ -15,7 +15,7 @@ utility that can be used in different contexts.
 ## Features
 
 ```
-$ use nvm 20
+$ nvm use 20
 $ npm i -g supersetbot
 $ supersetbot
 $ ./src/supersetbot
