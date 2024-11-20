@@ -132,6 +132,7 @@ export default function getCLI(context) {
           // Running sequentially to avoid rate limiting
           // eslint-disable-next-line no-await-in-loop
           try {
+            // eslint-disable-next-line no-await-in-loop
             await github.syncLabels({
               labels,
               existingLabels: prIdLabelMap.get(prId).map((l) => l.name),
