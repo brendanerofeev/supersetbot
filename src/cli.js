@@ -204,7 +204,21 @@ export default function getCLI(context) {
         const { extraFlags } = opts;
         const latestRelease = await github.getLatestReleaseTag();
         console.log(`Latest release: ${latestRelease}`);
-        const command = await docker.getDockerCommand({
+        let command;
+
+        // --------------------------------------------------------------------
+        console.log("Building python-base layer first to reduce parallelism");
+        const tempOpts = { ...opts, preset: 'python-base' };
+        command = await docker.getDockerCommand({
+          ...tempOpts, buildContext, buildContextRef, latestRelease, extraFlags,
+        });
+        context.log(command);
+        if (!opts.dryRun) {
+          utils.runShellCommand({ command, raiseOnError: false });
+        }
+        // --------------------------------------------------------------------
+
+        command = await docker.getDockerCommand({
           ...opts, buildContext, buildContextRef, latestRelease, extraFlags,
         });
         context.log(command);
