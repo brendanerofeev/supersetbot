@@ -588,19 +588,6 @@ class Github {
               issue_number: prNumber,
               labels: ['supersetbot'],
             });
-
-            // This is stupid, but it's one of the only way to trigger the CI checks
-            console.log('Close/reopen the PR to trigger the CI checks.');
-            await this.octokit.pulls.update({
-              ...this.unPackRepo(),
-              pull_number: prNumber,
-              state: 'closed',
-            });
-            await this.octokit.pulls.update({
-              ...this.unPackRepo(),
-              pull_number: prNumber,
-              state: 'open',
-            });
             return resp.data.html_url;
           } catch (error) {
             console.error(error);
