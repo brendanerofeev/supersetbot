@@ -353,6 +353,14 @@ class Github {
     } else {
       const tree = await this.getSubPackageTree({ onlyBase });
       deps = Object.keys(tree);
+      if (onlyBase) {
+        deps = [];
+        for (const k in tree) {
+          if (tree[k].vias.includes('apache-superset')) {
+            deps.push(k);
+          }
+        }
+      }
     }
     if (shuffle) {
       deps = shuffleArray(deps);
@@ -492,12 +500,12 @@ class Github {
       await runShellCommand({ command: 'git clean -f', ...shellOptions });
     }
 
-    // Run pip-compile-multi
     let pythonPackages = [pythonPackage];
     if (includeSubpackages) {
       pythonPackages = await this.allDescendantPackages(pythonPackage);
     }
     console.log('Packages to bump', pythonPackages);
+    // Run pip-compile-multi
     for (const lib of pythonPackages) {
       try {
         await runShellCommand({ command: `pip-compile-multi --use-cache -P ${lib}`, ...shellOptions });
