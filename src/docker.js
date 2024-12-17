@@ -113,12 +113,13 @@ export async function getDockerCommand({
     preset, platforms, sha, buildContext, buildContextRef: ref, forceLatest, latestRelease,
   }).map((tag) => `-t ${tag}`).join(' \\\n        ');
   const isAuthenticated = !!(process.env.DOCKERHUB_TOKEN);
+  const useCache = false;
 
   const dockerArgs = isAuthenticated ? '--push' : '--load';
   const targetArgument = buildTarget ? `--target ${buildTarget}` : '';
   const cacheRef = `${CACHE_REPO}:${pyVer}`;
   const platformArg = `--platform ${platforms.join(',')}`;
-  const cacheFromArg = `--cache-from=type=registry,ref=${cacheRef}`;
+  const cacheFromArg = useCache ? `--cache-from=type=registry,ref=${cacheRef}` : '';
   const cacheToArg = isAuthenticated ? `--cache-to=type=registry,mode=max,ref=${cacheRef}` : '';
   const buildArg = pyVer ? `--build-arg PY_VER=${pyVer}` : '';
   const actor = process.env.GITHUB_ACTOR;
