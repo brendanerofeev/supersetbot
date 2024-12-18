@@ -113,7 +113,7 @@ export async function getDockerCommand({
     preset, platforms, sha, buildContext, buildContextRef: ref, forceLatest, latestRelease,
   }).map((tag) => `-t ${tag}`).join(' \\\n        ');
   const isAuthenticated = !!(process.env.DOCKERHUB_TOKEN);
-  const useCache = false;
+  const useCache = true;
 
   const dockerArgs = isAuthenticated ? '--push' : '--load';
   const targetArgument = buildTarget ? `--target ${buildTarget}` : '';
